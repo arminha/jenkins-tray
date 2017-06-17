@@ -2,6 +2,7 @@ package com.github.arminha.jenkinstray
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import com.fasterxml.jackson.databind.ObjectMapper
+import com.github.arminha.jenkinstray.data.JenkinsStatus
 import com.github.arminha.jenkinstray.data.Job
 import groovy.transform.CompileStatic
 import groovy.transform.Immutable
@@ -24,5 +25,14 @@ class JenkinsView {
     ObjectMapper mapper = new ObjectMapper()
     def list = mapper.readValue(json, JobList)
     list.jobs
+  }
+
+  JenkinsStatus aggregateStatus(List<Job> jobs) {
+    def status = JenkinsStatus.unknown()
+    for(job in jobs) {
+      def next = JenkinsStatus.fromJob(job)
+      status = status.aggregate(next)
+    }
+    status
   }
 }
