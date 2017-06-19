@@ -1,14 +1,41 @@
 package com.github.arminha.jenkinstray
 
-import com.github.arminha.jenkinstray.data.JenkinsStatus
 import groovy.transform.CompileStatic
+
+import java.awt.Desktop
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit
 
 @CompileStatic
 class Main {
+
   static void main(String[] args) {
-    def view = new JenkinsView("test", null)
+    new Main().start("https://example.com/")
+  }
+
+  void start(String url) {
+    def view = new JenkinsView(url, null)
+    def tray = new Tray()
+    tray.addMenuItem("Open Jenkins", {
+      Desktop.getDesktop().browse(view.url.toURI())
+    })
+    tray.addMenuItem("Update", {
+      update(view, tray)
+    })
+    tray.addMenuItem("Exit", {
+      System.exit(0)
+    })
+
+    def executor = Executors.newSingleThreadScheduledExecutor()
+    executor.scheduleWithFixedDelay({ update(view, tray) }, 500, 30000, TimeUnit.MILLISECONDS)
+
+    tray.show()
+  }
+
+  void update(JenkinsView view, Tray tray) {
     def jobs = view.retrieveJobs()
     def status = view.aggregateStatus(jobs)
+    tray.setStatus(status)
     println(status)
   }
 }
