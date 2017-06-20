@@ -8,7 +8,7 @@ import com.github.arminha.jenkinstray.data.Job
 import spock.lang.Specification
 
 class JenkinsViewSpec extends Specification {
-  def view = new JenkinsView("", null)
+  def view = new JenkinsView("", null, null)
 
   def "aggregate empty job list"() {
     when:
