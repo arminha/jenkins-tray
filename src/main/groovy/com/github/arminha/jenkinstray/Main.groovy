@@ -10,11 +10,11 @@ import java.util.concurrent.TimeUnit
 class Main {
 
   static void main(String[] args) {
-    new Main().start("https://example.com/")
+    new Main().start("https://example.com/", null, null)
   }
 
-  void start(String url) {
-    def view = new JenkinsView(url, null)
+  void start(String url, String username, String accessToken) {
+    def view = new JenkinsView(url, username, accessToken)
     def tray = new Tray()
     tray.addMenuItem("Open Jenkins", {
       Desktop.getDesktop().browse(view.url.toURI())
