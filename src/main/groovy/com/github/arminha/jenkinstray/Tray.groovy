@@ -7,22 +7,19 @@ import java.awt.Image
 import java.awt.MenuItem
 import java.awt.PopupMenu
 import java.awt.SystemTray
-import java.awt.Toolkit
 import java.awt.TrayIcon
 
 @CompileStatic
 class Tray {
   private JenkinsStatus status = JenkinsStatus.unknown()
-  private SystemTray systemTray
-  private TrayIcon icon
-  private int iconWidth
-  private int iconHeight
+  private final SystemTray systemTray
+  private final TrayIcon icon
+  private final IconCache iconCache
 
   Tray() {
     systemTray = SystemTray.systemTray
     def size = systemTray.getTrayIconSize()
-    iconWidth = (int) size.width
-    iconHeight = (int) size.height
+    iconCache = new IconCache((int) size.width, (int) size.height)
     icon = new TrayIcon(loadImage(status), "Jenkins tray", new PopupMenu())
   }
 
@@ -47,9 +44,7 @@ class Tray {
   }
 
   private Image loadImage(JenkinsStatus status) {
-    def url = Thread.currentThread().contextClassLoader.getResource(iconName(status))
-    def img = Toolkit.defaultToolkit.getImage(url)
-    img.getScaledInstance(iconWidth, iconHeight, Image.SCALE_SMOOTH)
+    iconCache.getImage(iconName(status))
   }
 
   private String iconName(JenkinsStatus status) {
