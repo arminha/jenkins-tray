@@ -15,7 +15,7 @@ class Main {
 
   void start(String url, String username, String accessToken) {
     def view = new JenkinsView(url, username, accessToken)
-    def tray = new Tray()
+    def tray = new Tray(view.url)
     tray.addMenuItem("Open Jenkins", {
       Desktop.getDesktop().browse(view.url.toURI())
     })

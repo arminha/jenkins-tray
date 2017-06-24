@@ -15,18 +15,24 @@ class Tray {
   private final SystemTray systemTray
   private final TrayIcon icon
   private final IconCache iconCache
+  private final String title
 
-  Tray() {
+  Tray(String title) {
+    this.title = title
     systemTray = SystemTray.systemTray
     def size = systemTray.getTrayIconSize()
     iconCache = new IconCache((int) size.width, (int) size.height)
-    icon = new TrayIcon(loadImage(status), "Jenkins tray", new PopupMenu())
+    icon = new TrayIcon(loadImage(status), title, new PopupMenu())
   }
 
   void setStatus(JenkinsStatus status) {
     if (!this.status.equals(status)) {
       this.status = status
       icon.setImage(loadImage(status))
+      def cause = status.causedBy.map({
+        " ($it.name)".toString()
+      }).orElse('')
+      icon.setToolTip("$title - $status.status$cause")
     }
   }
 
