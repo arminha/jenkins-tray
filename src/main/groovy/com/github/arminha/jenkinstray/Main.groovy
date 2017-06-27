@@ -13,7 +13,7 @@ class Main {
   static void main(String[] args) {
     def main = new Main()
     def config = main.readConfigFile()
-    main.start(config.jenkinsUrl, config.username, config.accessToken)
+    main.start(config)
   }
 
   Config readConfigFile() {
@@ -30,9 +30,9 @@ class Main {
     config
   }
 
-  void start(String url, String username, String accessToken) {
-    def view = new JenkinsView(url, username, accessToken)
-    def tray = new Tray(view.url)
+  void start(Config config) {
+    def view = new JenkinsView(config.jenkinsUrl, config.username, config.accessToken)
+    def tray = new Tray(config.name ?: config.jenkinsUrl)
     tray.addMenuItem("Open Jenkins", {
       Desktop.getDesktop().browse(view.url.toURI())
     })

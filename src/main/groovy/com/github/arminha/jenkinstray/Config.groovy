@@ -12,6 +12,7 @@ import java.nio.file.Path
 @Canonical
 class Config {
   String jenkinsUrl
+  String name
   String username
   String accessToken
 
@@ -21,6 +22,7 @@ class Config {
     jenkinsUrl = jenkins.getString('url')
     username = jenkins.getString('user')
     accessToken = jenkins.getString('access_token')
+    name = jenkins.getString('name')
   }
 
   void writeToFile(Path path) {
@@ -30,6 +32,9 @@ class Config {
     }
     if (accessToken) {
       jenkins['access_token'] = accessToken
+    }
+    if (name) {
+      jenkins['name'] = name
     }
     def map = [jenkins:jenkins]
     Files.newOutputStream(path).withCloseable {
