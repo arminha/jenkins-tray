@@ -4,6 +4,7 @@ import groovy.transform.CompileStatic
 
 import java.awt.Desktop
 import java.nio.file.Files
+import java.nio.file.Path
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 
@@ -23,11 +24,19 @@ class Main {
       config.readFromFile(configPath)
     } else {
       config.jenkinsUrl = 'https://example.com/'
+      createNonExistingDirs(configPath)
       config.writeToFile(configPath)
       println("Please edit config file at $configPath")
       System.exit(0)
     }
     config
+  }
+
+  private void createNonExistingDirs(Path configPath) {
+    def dir = configPath.getParent()
+    if (dir) {
+      Files.createDirectories(dir)
+    }
   }
 
   void start(Config config) {
