@@ -1,7 +1,13 @@
-apply plugin: 'application'
-apply plugin: 'groovy'
+plugins {
+  id 'groovy'
+  id 'application'
+  id 'edu.sc.seis.launch4j' version '2.3.0'
+}
 
-mainClassName = "com.github.arminha.jenkinstray.Main"
+ext {
+  mainClass = 'com.github.arminha.jenkinstray.Main'
+}
+mainClassName = mainClass
 
 repositories {
    mavenCentral()
@@ -16,6 +22,31 @@ dependencies {
     exclude module: 'groovy-all'
   }
 }
+
+String windowsClasspath(FileCollection jarFiles) {
+  def cp = ''
+  jarFiles.each {
+    cp += ";lib\\$it.name"
+  }
+  return cp.substring(1)
+}
+
+launch4j {
+  mainClassName = mainClass
+  dontWrapJar = true
+  jvmOptions = ['-classpath ' + windowsClasspath(sourceSets.main.runtimeClasspath)]
+}
+
+distributions {
+  main {
+    contents {
+      from('build/launch4j') {
+        include '*.exe'
+      }
+    }
+  }
+}
+distZip.dependsOn createExe
 
 task wrapper(type: Wrapper) {
   gradleVersion = '4.0'
