@@ -23,18 +23,11 @@ dependencies {
   }
 }
 
-String windowsClasspath(FileCollection jarFiles) {
-  def cp = ''
-  jarFiles.each {
-    cp += ";lib\\$it.name"
-  }
-  return cp.substring(1)
-}
-
 launch4j {
   mainClassName = mainClass
   dontWrapJar = true
-  jvmOptions = ['-classpath ' + windowsClasspath(sourceSets.main.runtimeClasspath)]
+  // add dependencies to classpath
+  copyConfigurable = sourceSets.main.runtimeClasspath.filter { it.name.endsWith('.jar') }
 }
 
 distributions {
