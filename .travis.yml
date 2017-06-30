@@ -5,6 +5,11 @@ jdk:
 dist: trusty
 sudo: false
 
+addons:
+  apt:
+    packages:
+    - libc6:i386 # required by launch4j
+
 # caching
 before_cache:
   - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
