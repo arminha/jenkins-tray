@@ -33,13 +33,12 @@ launch4j {
 distributions {
   main {
     contents {
-      from('build/launch4j') {
+      from(tasks.createExe.outputs) {
         include '*.exe'
       }
     }
   }
 }
-distZip.dependsOn createExe
 
 task wrapper(type: Wrapper) {
   gradleVersion = '4.0'
