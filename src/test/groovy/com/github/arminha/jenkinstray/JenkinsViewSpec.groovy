@@ -15,8 +15,7 @@ class JenkinsViewSpec extends Specification {
     def status = view.aggregateStatus([])
 
     then:
-    status.status == JenkinsStatus.Status.Unknown
-    status.causedBy == Optional.empty()
+    status == JenkinsStatus.Unknown.INSTANCE
   }
 
   def "aggregate one job"() {
@@ -25,8 +24,7 @@ class JenkinsViewSpec extends Specification {
     def status = view.aggregateStatus([job])
 
     then:
-    status.status == JenkinsStatus.Status.NotBuilt
-    status.causedBy == Optional.empty()
+    status == JenkinsStatus.NotBuilt.INSTANCE
   }
 
   def "aggregate two jobs"() {
@@ -36,7 +34,6 @@ class JenkinsViewSpec extends Specification {
     def status = view.aggregateStatus([job1, job2])
 
     then:
-    status.status == JenkinsStatus.Status.Failure
-    status.causedBy == Optional.of(job2)
+    status == new JenkinsStatus.Failure(job2)
   }
 }
