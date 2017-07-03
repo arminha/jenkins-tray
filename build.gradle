@@ -6,8 +6,10 @@ plugins {
 
 ext {
   mainClass = 'com.github.arminha.jenkinstray.Main'
+  jvmOpts = ['-Xms10m', '-Xmx32m', '-Xss228k', '-XX:+UseSerialGC']
 }
 mainClassName = mainClass
+applicationDefaultJvmArgs = jvmOpts
 
 repositories {
    mavenCentral()
@@ -28,6 +30,7 @@ launch4j {
   dontWrapJar = true
   // add dependencies to classpath
   copyConfigurable = sourceSets.main.runtimeClasspath.filter { it.name.endsWith('.jar') }
+  jvmOptions = jvmOpts
 }
 
 distributions {
