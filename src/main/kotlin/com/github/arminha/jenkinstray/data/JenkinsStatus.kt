@@ -46,4 +46,14 @@ sealed class JenkinsStatus {
             }
         }
     }
+
+    override fun toString(): String {
+        return when(this) {
+            Unknown -> "Unknown"
+            NotBuilt -> "NotBuilt"
+            Success -> "Success"
+            is Unstable -> "Unstable($causedBy)"
+            is Failure -> "Failure($causedBy)"
+        }
+    }
 }

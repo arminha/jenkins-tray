@@ -34,7 +34,13 @@ class JenkinsView(val url: String, val username: String?, val accessToken: Strin
         val list = response.use {
             val status = response.statusLine.statusCode
             if (status in 200..299) {
-                mapper.readValue<JobList>(response.entity.content)
+                val content = response.entity.content.readBytes()
+                try {
+                    mapper.readValue<JobList>(content)
+                } catch (e: Exception) {
+                    println("json = '" + String(content, StandardCharsets.UTF_8) + "'")
+                    throw e
+                }
             } else {
                 println("Response status $status")
                 JobList(ArrayList())

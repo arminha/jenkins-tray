@@ -56,9 +56,14 @@ object Main {
     }
 
     fun update(view: JenkinsView, tray: Tray) {
-        val jobs = view.retrieveJobs()
-        val status = view.aggregateStatus(jobs)
-        tray.setStatus(status)
-        println(status)
+        try {
+            val jobs = view.retrieveJobs()
+            val status = view.aggregateStatus(jobs)
+            tray.setStatus(status)
+            println("Jenkins status: $status")
+        } catch (e: Exception) {
+            println("Update failed: ${e.message}")
+            e.printStackTrace()
+        }
     }
 }
