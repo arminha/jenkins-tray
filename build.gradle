@@ -1,8 +1,8 @@
 plugins {
   id 'groovy'
   id 'application'
-  id 'org.jetbrains.kotlin.jvm' version '1.2.10'
-  id 'edu.sc.seis.launch4j' version '2.4.2'
+  id 'org.jetbrains.kotlin.jvm' version '1.2.21'
+  id 'edu.sc.seis.launch4j' version '2.4.3'
 }
 
 ext {
@@ -17,8 +17,9 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.2'
-  implementation 'com.fasterxml.jackson.module:jackson-module-kotlin:2.9.2'
+  def jackson = '2.9.4'
+  implementation "com.fasterxml.jackson.core:jackson-databind:$jackson"
+  implementation "com.fasterxml.jackson.module:jackson-module-kotlin:$jackson"
   implementation 'com.squareup.okhttp3:okhttp:3.9.1'
   implementation 'com.moandjiezana.toml:toml4j:0.7.2'
   implementation 'org.jetbrains.kotlin:kotlin-stdlib-jre8'
