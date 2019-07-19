@@ -16,35 +16,35 @@
  */
 package com.github.arminha.jenkinstray.data
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.beust.klaxon.Json
 
 enum class Color {
-    @JsonProperty("red")
+    @Json("red")
     Red,
-    @JsonProperty("red_anime")
+    @Json("red_anime")
     RedAnime,
-    @JsonProperty("yellow")
+    @Json("yellow")
     Yellow,
-    @JsonProperty("yellow_anime")
+    @Json("yellow_anime")
     YellowAnime,
-    @JsonProperty("blue")
+    @Json("blue")
     Blue,
-    @JsonProperty("blue_anime")
+    @Json("blue_anime")
     BlueAnime,
-    @JsonProperty("grey")
+    @Json("grey")
     Grey,
-    @JsonProperty("grey_anime")
+    @Json("grey_anime")
     GreyAnime,
-    @JsonProperty("disabled")
+    @Json("disabled")
     Disabled,
-    @JsonProperty("disabled_anime")
+    @Json("disabled_anime")
     DisabledAnime,
-    @JsonProperty("aborted")
+    @Json("aborted")
     Aborted,
-    @JsonProperty("aborted_anime")
+    @Json("aborted_anime")
     AbortedAnime,
-    @JsonProperty("notbuilt")
+    @Json("notbuilt")
     NotBuilt,
-    @JsonProperty("notbuilt_anime")
+    @Json("notbuilt_anime")
     NotBuiltAnime,
 }

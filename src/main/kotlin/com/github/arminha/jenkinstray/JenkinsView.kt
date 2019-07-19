@@ -16,9 +16,7 @@
  */
 package com.github.arminha.jenkinstray
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
+import com.beust.klaxon.Klaxon
 import com.github.arminha.jenkinstray.data.JenkinsStatus
 import com.github.arminha.jenkinstray.data.Job
 import java.nio.charset.StandardCharsets
@@ -26,13 +24,13 @@ import java.util.Base64
 import kotlin.collections.ArrayList
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import java.io.ByteArrayInputStream
 
 class JenkinsView(val url: String, private val username: String?, private val accessToken: String?) {
     companion object {
         val httpClient = OkHttpClient()
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
     data class JobList(val jobs: List<Job>)
 
     fun retrieveJobs(): List<Job> {
@@ -45,14 +43,13 @@ class JenkinsView(val url: String, private val username: String?, private val ac
             val authHeader = "Basic $encodedAuth"
             request.addHeader("Authorization", authHeader)
         }
-        val mapper = jacksonObjectMapper()
         val response = httpClient.newCall(request.build()).execute()
         val list = response.use {
             val status = response.code
             if (status in 200..299) {
                 val content = response.body!!.bytes()
                 try {
-                    mapper.readValue<JobList>(content)
+                    Klaxon().parse<JobList>(ByteArrayInputStream(content))
                 } catch (e: Exception) {
                     println("json = '" + String(content, StandardCharsets.UTF_8) + "'")
                     throw e
@@ -62,7 +59,7 @@ class JenkinsView(val url: String, private val username: String?, private val ac
                 JobList(ArrayList())
             }
         }
-        return list.jobs
+        return list!!.jobs
     }
 
     fun aggregateStatus(jobs: List<Job>): JenkinsStatus {

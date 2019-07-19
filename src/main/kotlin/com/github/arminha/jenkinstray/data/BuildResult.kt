@@ -16,17 +16,17 @@
  */
 package com.github.arminha.jenkinstray.data
 
-import com.fasterxml.jackson.annotation.JsonProperty
+import com.beust.klaxon.Json
 
 enum class BuildResult {
-    @JsonProperty("SUCCESS")
+    @Json("SUCCESS")
     Success,
-    @JsonProperty("UNSTABLE")
+    @Json("UNSTABLE")
     Unstable,
-    @JsonProperty("FAILURE")
+    @Json("FAILURE")
     Failure,
-    @JsonProperty("NOT_BUILT")
+    @Json("NOT_BUILT")
     NotBuilt,
-    @JsonProperty("ABORTED")
+    @Json("ABORTED")
     Aborted,
 }
