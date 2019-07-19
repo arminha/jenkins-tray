@@ -23,7 +23,7 @@ import java.nio.file.Paths
  * Implements parts of the XDG directory specification with sensible fallbacks on Windows systems.
  */
 object XdgBasedir {
-    private val XDG_CONFIG_HOME: String = "XDG_CONFIG_HOME"
+    private const val XDG_CONFIG_HOME: String = "XDG_CONFIG_HOME"
 
     /**
      * Returns the XDG_CONFIG_HOME directory.

@@ -6,6 +6,7 @@ import java.nio.file.Files
 import java.nio.file.Path
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
+import kotlin.system.exitProcess
 
 object Main {
     @JvmStatic
@@ -14,7 +15,7 @@ object Main {
         start(config)
     }
 
-    fun readConfigFile(): Config {
+    private fun readConfigFile(): Config {
         val configPath = XdgBasedir.configHome().resolve("jenkins-tray").resolve("settings.toml")
         val config = Config()
         if (Files.exists(configPath)) {
@@ -24,7 +25,7 @@ object Main {
             createNonExistingDirs(configPath)
             config.writeToFile(configPath)
             println("Please edit config file at $configPath")
-            System.exit(0)
+            exitProcess(0)
         }
         return config
     }
@@ -36,18 +37,18 @@ object Main {
         }
     }
 
-    fun start(config: Config) {
+    private fun start(config: Config) {
         val view = JenkinsView(config.jenkinsUrl, config.username, config.accessToken)
         val tray = Tray(config.name ?: config.jenkinsUrl)
-        tray.addMenuItem("Open Jenkins", {
+        tray.addMenuItem("Open Jenkins") {
             Desktop.getDesktop().browse(URI.create(view.url))
-        })
-        tray.addMenuItem("Update", {
+        }
+        tray.addMenuItem("Update") {
             update(view, tray)
-        })
-        tray.addMenuItem("Exit", {
-            System.exit(0)
-        })
+        }
+        tray.addMenuItem("Exit") {
+            exitProcess(0)
+        }
 
         val executor = Executors.newSingleThreadScheduledExecutor()
         executor.scheduleWithFixedDelay({ update(view, tray) }, 500, 30000, TimeUnit.MILLISECONDS)
@@ -55,7 +56,7 @@ object Main {
         tray.show()
     }
 
-    fun update(view: JenkinsView, tray: Tray) {
+    private fun update(view: JenkinsView, tray: Tray) {
         try {
             val jobs = view.retrieveJobs()
             val status = view.aggregateStatus(jobs)

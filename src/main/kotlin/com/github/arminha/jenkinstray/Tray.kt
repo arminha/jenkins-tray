@@ -23,16 +23,13 @@ import java.awt.PopupMenu
 import java.awt.SystemTray
 import java.awt.TrayIcon
 
-class Tray {
+class Tray(private val title: String) {
     private var status: JenkinsStatus = JenkinsStatus.Unknown
-    private val systemTray: SystemTray
+    private val systemTray: SystemTray = SystemTray.getSystemTray()
     private val icon: TrayIcon
     private val iconCache: IconCache
-    private val title: String
 
-    constructor(title: String) {
-        this.title = title
-        systemTray = SystemTray.getSystemTray()
+    init {
         val size = systemTray.trayIconSize
         iconCache = IconCache(size.width, size.height)
         icon = TrayIcon(loadImage(status), title, PopupMenu())
@@ -55,9 +52,9 @@ class Tray {
     fun addMenuItem(label: String, callback: () -> Unit) {
         val item = MenuItem()
         item.label = label
-        item.addActionListener({
+        item.addActionListener {
             callback()
-        })
+        }
         icon.popupMenu.add(item)
     }
 

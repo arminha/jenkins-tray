@@ -23,6 +23,6 @@ import java.util.Optional
 data class Job(val name: String, val color: Color, val lastBuild: Build?) {
 
     fun buildTimestamp(): Optional<Long> {
-        return Optional.ofNullable(lastBuild).map({ it.timestamp })
+        return Optional.ofNullable(lastBuild).map { it.timestamp }
     }
 }

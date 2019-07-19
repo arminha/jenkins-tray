@@ -19,14 +19,10 @@ package com.github.arminha.jenkinstray
 import java.awt.Image
 import java.awt.Toolkit
 
-class IconCache {
-    private val iconWidth: Int
-    private val iconHeight: Int
+class IconCache(private val iconWidth: Int, private val iconHeight: Int) {
     private val cache: MutableMap<String, Image>
 
-    constructor(iconWidth: Int, iconHeight: Int) {
-        this.iconWidth = iconWidth
-        this.iconHeight = iconHeight
+    init {
         this.cache = HashMap()
     }
 
@@ -34,7 +30,7 @@ class IconCache {
         var img = cache[resourceName]
         if (img == null) {
             img = loadImage(resourceName)
-            cache.put(resourceName, img)
+            cache[resourceName] = img
         }
         return img
     }

@@ -39,13 +39,13 @@ class Config {
     fun writeToFile(path: Path) {
         val jenkins = mutableMapOf<String, String?>("url" to jenkinsUrl)
         if (username != null) {
-            jenkins.put("user", username)
+            jenkins["user"] = username
         }
         if (accessToken != null) {
-            jenkins.put("access_token", accessToken)
+            jenkins["access_token"] = accessToken
         }
         if (name != null) {
-            jenkins.put("name", name)
+            jenkins["name"] = name
         }
         val map = mapOf<String, Any?>("jenkins" to jenkins)
         Files.newOutputStream(path).use {
