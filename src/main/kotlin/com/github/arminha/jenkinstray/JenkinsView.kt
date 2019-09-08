@@ -26,7 +26,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.ByteArrayInputStream
 
-class JenkinsView(val url: String, private val username: String?, private val accessToken: String?) {
+class JenkinsView(val url: String, val username: String?, val accessToken: String?) {
     companion object {
         val httpClient = OkHttpClient()
     }
@@ -37,17 +37,17 @@ class JenkinsView(val url: String, private val username: String?, private val ac
         val request = Request.Builder()
                 .url(url + "api/json?tree=jobs[name,color,lastBuild[number,result,timestamp]]")
         if (username != null && accessToken != null) {
-            val auth = "$username:$accessToken"
+            val auth = username + ":" + accessToken
             val encodedAuth = Base64.getMimeEncoder().encodeToString(
-                    auth.toByteArray(StandardCharsets.UTF_8))
-            val authHeader = "Basic $encodedAuth"
+                    auth.toByteArray(StandardCharsets.ISO_8859_1))
+            val authHeader = "Basic " + encodedAuth
             request.addHeader("Authorization", authHeader)
         }
         val response = httpClient.newCall(request.build()).execute()
         val list = response.use {
-            val status = response.code
+            val status = response.code()
             if (status in 200..299) {
-                val content = response.body!!.bytes()
+                val content = response.body()!!.bytes()
                 try {
                     Klaxon().parse<JobList>(ByteArrayInputStream(content))
                 } catch (e: Exception) {
