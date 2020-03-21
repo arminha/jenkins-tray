@@ -83,7 +83,7 @@ class JenkinsViewSpec extends Specification {
     list == [new Job("jobname", Color.Blue, new Build(28, BuildResult.Success, 1547148202107))]
   }
 
-  def "parse job with minimal data"() {
+  def "parse job without build result"() {
     when:
     def json = '''{"jobs": [
   {
@@ -100,5 +100,20 @@ class JenkinsViewSpec extends Specification {
 
     then:
     list == [new Job("jobname", Color.GreyAnime, new Build(28, null, 1547148202107L))]
+  }
+
+  def "parse job without build"() {
+    when:
+    def json = '''{"jobs": [
+  {
+      "name": "jobname",
+      "color": "grey_anime",
+      "lastBuild": null
+  }
+]}'''
+    def list = view.parseJobList(new ByteArrayInputStream(json.getBytes(UTF_8)))
+
+    then:
+    list == [new Job("jobname", Color.GreyAnime, null)]
   }
 }
