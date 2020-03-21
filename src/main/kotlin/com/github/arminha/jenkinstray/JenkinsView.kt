@@ -25,13 +25,17 @@ import kotlin.collections.ArrayList
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.ByteArrayInputStream
+import java.io.InputStream
 
 class JenkinsView(val url: String, val username: String?, val accessToken: String?) {
     companion object {
         val httpClient = OkHttpClient()
     }
 
-    data class JobList(val jobs: List<Job>)
+    private data class JobList(val jobs: List<Job>)
+
+    fun parseJobList(stream: InputStream): List<Job> =
+            Klaxon().parse<JobList>(stream)!!.jobs
 
     fun retrieveJobs(): List<Job> {
         val request = Request.Builder()
@@ -44,22 +48,21 @@ class JenkinsView(val url: String, val username: String?, val accessToken: Strin
             request.addHeader("Authorization", authHeader)
         }
         val response = httpClient.newCall(request.build()).execute()
-        val list = response.use {
+        return response.use {
             val status = response.code()
             if (status in 200..299) {
                 val content = response.body()!!.bytes()
                 try {
-                    Klaxon().parse<JobList>(ByteArrayInputStream(content))
+                    parseJobList(ByteArrayInputStream(content))
                 } catch (e: Exception) {
                     println("json = '" + String(content, StandardCharsets.UTF_8) + "'")
                     throw e
                 }
             } else {
                 println("Response status $status")
-                JobList(ArrayList())
+                ArrayList()
             }
         }
-        return list!!.jobs
     }
 
     fun aggregateStatus(jobs: List<Job>): JenkinsStatus {

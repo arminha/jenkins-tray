@@ -23,6 +23,8 @@ import com.github.arminha.jenkinstray.data.JenkinsStatus
 import com.github.arminha.jenkinstray.data.Job
 import spock.lang.Specification
 
+import static java.nio.charset.StandardCharsets.UTF_8
+
 class JenkinsViewSpec extends Specification {
   def view = new JenkinsView("", null, null)
 
@@ -51,5 +53,52 @@ class JenkinsViewSpec extends Specification {
 
     then:
     status == new JenkinsStatus.Failure(job2)
+  }
+
+  def "parse empty job list"() {
+    when:
+    def json = '{"jobs": []}'
+    def list = view.parseJobList(new ByteArrayInputStream(json.getBytes(UTF_8)))
+
+    then:
+    list == []
+  }
+
+  def "parse job list with one job"() {
+    when:
+    def json = '''{"jobs": [
+  {
+      "name": "jobname",
+      "color": "blue",
+      "lastBuild": {
+        "number": 28,
+        "result": "SUCCESS",
+        "timestamp": 1547148202107
+      }
+  }
+]}'''
+    def list = view.parseJobList(new ByteArrayInputStream(json.getBytes(UTF_8)))
+
+    then:
+    list == [new Job("jobname", Color.Blue, new Build(28, BuildResult.Success, 1547148202107))]
+  }
+
+  def "parse job with minimal data"() {
+    when:
+    def json = '''{"jobs": [
+  {
+      "name": "jobname",
+      "color": "grey_anime",
+      "lastBuild": {
+        "number": 28,
+        "result": null,
+        "timestamp": 1547148202107
+      }
+  }
+]}'''
+    def list = view.parseJobList(new ByteArrayInputStream(json.getBytes(UTF_8)))
+
+    then:
+    list == [new Job("jobname", Color.GreyAnime, new Build(28, null, 1547148202107L))]
   }
 }
