@@ -16,4 +16,6 @@
  */
 package com.github.arminha.jenkinstray.data
 
-data class Build(val number: Int, val result: BuildResult?, val timestamp: Long)
+import com.github.arminha.jenkinstray.klaxon.NullableEnum
+
+data class Build(val number: Int, @NullableEnum val result: BuildResult?, val timestamp: Long)

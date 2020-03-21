@@ -19,6 +19,8 @@ package com.github.arminha.jenkinstray
 import com.beust.klaxon.Klaxon
 import com.github.arminha.jenkinstray.data.JenkinsStatus
 import com.github.arminha.jenkinstray.data.Job
+import com.github.arminha.jenkinstray.klaxon.EnumConverter
+import com.github.arminha.jenkinstray.klaxon.NullableEnum
 import java.nio.charset.StandardCharsets
 import java.util.Base64
 import kotlin.collections.ArrayList
@@ -35,7 +37,8 @@ class JenkinsView(val url: String, val username: String?, val accessToken: Strin
     private data class JobList(val jobs: List<Job>)
 
     fun parseJobList(stream: InputStream): List<Job> =
-            Klaxon().parse<JobList>(stream)!!.jobs
+            Klaxon().fieldConverter(NullableEnum::class, EnumConverter())
+                    .parse<JobList>(stream)!!.jobs
 
     fun retrieveJobs(): List<Job> {
         val request = Request.Builder()
