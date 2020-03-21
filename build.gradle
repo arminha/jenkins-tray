@@ -39,6 +39,7 @@ distributions {
     contents {
       from(tasks.createExe.outputs) {
         include '*.exe'
+        duplicatesStrategy(DuplicatesStrategy.EXCLUDE)
       }
     }
   }
