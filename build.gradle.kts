@@ -1,8 +1,8 @@
 plugins {
   groovy
   application
-  id("org.jetbrains.kotlin.jvm").version("1.3.70")
-  id("edu.sc.seis.launch4j").version("2.4.6")
+  kotlin("jvm") version "1.4.10"
+  id("edu.sc.seis.launch4j") version "2.4.6"
 }
 
 val appMainClass = "com.github.arminha.jenkinstray.Main"
