@@ -3,4 +3,4 @@ jenkins-tray
 
 A system tray icon to display Jenkins build status.
 
-[![Build Status](https://travis-ci.org/arminha/jenkins-tray.svg?branch=master)](https://travis-ci.org/arminha/jenkins-tray)
+[![Build Status](https://github.com/arminha/jenkins-tray/workflows/build/badge.svg)](https://github.com/arminha/jenkins-tray/actions?query=workflow%3Abuild)
