@@ -23,8 +23,11 @@ dependencies {
   implementation("com.moandjiezana.toml:toml4j:0.7.2")
   implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
   implementation("org.jetbrains.kotlin:kotlin-reflect")
-  testImplementation("org.codehaus.groovy:groovy:2.5.10")
-  testImplementation("org.spockframework:spock-core:1.3-groovy-2.5")
+  testImplementation("org.spockframework:spock-core:2.0-M4-groovy-3.0")
+}
+
+tasks.withType<Test> {
+  useJUnitPlatform()
 }
 
 launch4j {
